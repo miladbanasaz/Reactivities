@@ -1,15 +1,14 @@
-import React, { ChangeEvent, useState } from "react";
+import { observer } from "mobx-react-lite";
+import { ChangeEvent, useState } from "react";
 import { Button, Form, Segment } from "semantic-ui-react";
-import { Activity } from "../../../app/Models/activity";
+import { useStore } from "../../../app/stores/store";
 
-interface Props {
-    activity: Activity | undefined;
-    closeForm: () => void;
-    createOrEdit: (activity: Activity) => void;
-    submitting: boolean;
-}
 
-export default function ActivityForm({ activity: selectedActivity, closeForm, createOrEdit, submitting }: Props) {
+export default observer(function ActivityForm() {
+
+    const {activityStore} = useStore();
+    const {selectedActivity, close: closeForm,createActivity, updateActivity,loading} = activityStore;
+
     const initiateState = selectedActivity ?? {
         id: '',
         category: '',
@@ -23,7 +22,7 @@ export default function ActivityForm({ activity: selectedActivity, closeForm, cr
     const [activity, setActivity] = useState(initiateState);
 
     function handleSubmit() {
-        createOrEdit(activity);
+        activity.id ? updateActivity(activity) :createActivity(activity);
     }
 
     function handleInputChange(event : ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -39,9 +38,9 @@ export default function ActivityForm({ activity: selectedActivity, closeForm, cr
                 <Form.Input type="date" placeholder="Date" value={activity.date} name="date" onChange={handleInputChange}/>
                 <Form.Input placeholder="City" value={activity.city} name="city" onChange={handleInputChange}/>
                 <Form.Input placeholder="Venue" value={activity.venue} name="venue" onChange={handleInputChange}/>
-                <Button loading={submitting} floated="right" positive type="Submit" content="Submit" />
+                <Button loading={loading} floated="right" positive type="Submit" content="Submit" />
                 <Button floated="right" type="Button" content="Cancel" onClick={closeForm} />
             </Form>
         </Segment>
     )
-}
+})
