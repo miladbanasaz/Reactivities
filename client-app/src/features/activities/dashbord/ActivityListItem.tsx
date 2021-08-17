@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import * as react from "react";
 import { Link } from "react-router-dom";
 import * as semanticUiReact from "semantic-ui-react";
@@ -38,7 +39,7 @@ export default function ActivityListItem({ activity }: Props) {
             </semanticUiReact.Segment>
             <semanticUiReact.Segment>
                 <span>
-                    <semanticUiReact.Icon name="clock" /> {activity.date}
+                    <semanticUiReact.Icon name="clock" /> {format(activity.date!,'dd MMM yyyy h:mm aa')}
                     <semanticUiReact.Icon name="marker" /> {activity.venue}
                 </span>
             </semanticUiReact.Segment>
